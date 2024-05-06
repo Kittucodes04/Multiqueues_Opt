@@ -156,6 +156,7 @@ void *OptExactDelete(void *arg) {
       n += ops;
     }
   }
+  count3*=2;
   return NULL;
 }
 
@@ -264,11 +265,24 @@ int main() {
   for (int i = 0; i < 1; i++) {
     pthread_join(th3[i], NULL);
   }
-  
+  pthread_t thi4[p];
+  for (int i = 0; i < p; i++) {
+    pthread_create(&thi4[i], NULL, insert, &s);
+  }
+  for (int i = 0; i < p; i++) {
+    pthread_join(thi4[i], NULL);
+  }
+  pthread_t th4[p];
+   for (int i = 0; i < 1; i++) {
+    pthread_create(&th4[i], NULL, OptExactDelete, &i);
+  }
+  for (int i = 0; i < 1; i++) {
+    pthread_join(th4[i], NULL);
+  }
   cout << "Runned succesfully\n" << endl;
   cout << "Error Percentage of DeleteMin" << (globalError3/count1)/p * 100<< endl;
   cout << "Error Percentage of OptHalfDelete " << (globalError1/count2)/p*100<< endl;
-  cout << "Error Percentage of OptExactDelete" << ((globalError2/count3)/p)*100<< endl;
+  cout << "Error Percentage of OptExactDelete"<<((globalError2/count3)/p)*100<< endl;
 
   return 0;
 }
